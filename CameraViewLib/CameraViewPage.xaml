@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CameraViewLib.CameraViewPage"
+             xmlns:cv="clr-namespace:CameraViewLib"
+             Title="CameraViewPage">
+    <ScrollView>
+        <Grid HeightRequest="640">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <cv:CameraView x:Name="cameraView" Grid.Column="0" FrameReady="cameraView_FrameReady"/>
+            <VerticalStackLayout Grid.Column="1">
+                <Label x:Name="caption" TextColor="Red" Text="start" HorizontalOptions="Center"/>
+                <Image x:Name="OutputImage" HeightRequest="600"/>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>
