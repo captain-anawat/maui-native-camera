@@ -14,8 +14,8 @@ public partial class CameraViewPage : ContentPage
     bool saveImage = false;
     bool cameraReady = true;
     public CameraViewPage()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
     }
     protected override void OnDisappearing()
     {
@@ -41,27 +41,37 @@ public partial class CameraViewPage : ContentPage
         using SKImage image = SKImage.FromBitmap(bitmap);
         SKData encoded = image.Encode();
         var bytes = encoded.ToArray();
-        var result = await Ultraface.ProcessImageAsync(bytes);
-        MainThread.BeginInvokeOnMainThread(() =>
+        try
         {
-            OutputImage.Source = ImageSource.FromStream(() => new MemoryStream(result.Image));
-            caption.Text = result.Caption;
-        });
+            var result = await Ultraface.ProcessImageAsync(bytes);
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                OutputImage.Source = ImageSource.FromStream(() => new MemoryStream(result.Image));
+                caption.Text = result.Caption;
+            });
 
-        //// process image
-        //if (index < 60 && saveImage)
-        //{
-        //    index++;
+            //// process image
+            //if (index < 60 && saveImage)
+            //{
+            //    index++;
 
-        //    using SKData data = image.Encode(SKEncodedImageFormat.Jpeg, 100);
-        //    var appDataDirectory = FileSystem.AppDataDirectory;
+            //    using SKData data = image.Encode(SKEncodedImageFormat.Jpeg, 100);
+            //    var appDataDirectory = FileSystem.AppDataDirectory;
 
-        //    // Combine the app's data directory path with your file name
-        //    var filePath = Path.Combine(appDataDirectory, $"yourfile{index}.jpg");
+            //    // Combine the app's data directory path with your file name
+            //    var filePath = Path.Combine(appDataDirectory, $"yourfile{index}.jpg");
 
-        //    using FileStream streamA = File.OpenWrite(filePath);
-        //    data.SaveTo(streamA);
-        //}
+            //    using FileStream streamA = File.OpenWrite(filePath);
+            //    data.SaveTo(streamA);
+            //}
+        }
+        catch
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                OutputImage.Source = ImageSource.FromStream(() => new MemoryStream(bytes));
+            });
+        }
     }
 
 }
